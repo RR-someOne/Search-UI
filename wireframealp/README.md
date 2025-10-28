@@ -1,3 +1,20 @@
+
+# WireFrame-EHS
+
+This project is a wireframe UI for the EHS Platform, inspired by the Spotify homepage layout. It features a sidebar, header, and card-based system section.
+
+## Custom Port
+
+To run the app on port 3001:
+
+```sh
+PORT=3001 npm start
+```
+
+## Repository
+
+GitHub: [WireFrame-EHS](https://github.com/RR-someOne/WireFrame-EHS.git)
+
 # Getting Started with Create React Apps
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

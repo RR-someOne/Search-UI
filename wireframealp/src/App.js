@@ -34,7 +34,7 @@ function App() {
             <div className="card">Advanced Task Manager based on memories/queries</div>
             <div className="card">Search System for AI based Models/Medical Research/Finance</div>
              <div className="card">EHS Records Systems</div>
-                          <div className="card">Travel</div>
+                          <div className="card">Travel Search Advisory/News</div>
           </div>
         </section>
       </main>

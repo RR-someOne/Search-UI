@@ -2,6 +2,7 @@
 
 import './App.css';
 import MemoryServiceHomePage from './components/MemoryServiceHomePage';
+import JournalPage from './components/JournalPage';
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +15,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-  <Route path="/memory-journaling" element={<MemoryServiceHomePage />} />
+        <Route path="/memory-journaling" element={<MemoryServiceHomePage />} />
+        <Route path="/journal" element={<JournalPage />} />
       </Routes>
     </Router>
   );

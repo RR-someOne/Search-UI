@@ -1,7 +1,27 @@
 
+
 # WireFrame-EHS
 
-This project is a wireframe UI for the EHS Platform, inspired by the Spotify homepage layout. It features a sidebar, header, and card-based system section.
+This project is a wireframe UI for the EHS Platform, inspired by the Spotify homepage layout. It features a sidebar, header, and card-based system section.s
+
+## Features
+
+- Sidebar navigation and header layout
+- Card-based system section on the homepage
+- Memory System Journaling page with three service cards:
+	- Journaling (click to open Journal Page)
+	- Memories Query Service
+	- Memories Picture Service
+- Journal Page with a prompt: "Add word document style notebook"
+
+## Navigation
+
+To access the Journal Page:
+
+1. Click "Memory System Journaling" on the homepage.
+2. On the Memory Service Home Page, click the "Journaling" card.
+3. You will be routed to the Journal Page, which displays a notebook prompt.
+
 
 ## Custom Port
 

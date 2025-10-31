@@ -1,9 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
-function MemoryServiceHomePage() {
-  const navigate = useNavigate();
+function JournalPage() {
   return (
     <div className="spotify-app">
       <aside className="sidebar">
@@ -11,7 +9,7 @@ function MemoryServiceHomePage() {
         <nav className="sidebar-nav">
           <ul>
             <li>Home</li>
-            <li className="active">Memory System</li>
+            <li className="active">Journaling</li>
             <li></li>
           </ul>
         </nav>
@@ -27,16 +25,12 @@ function MemoryServiceHomePage() {
           </div>
         </header>
         <section className="section">
-          <h2>Memory System Journaling</h2>
-          <div className="card-row">
-            <div className="card" style={{cursor: 'pointer'}} onClick={() => navigate('/journal')}>Journaling</div>
-            <div className="card" style={{cursor: 'pointer'}}>Memories Query Service</div>
-            <div className="card" style={{cursor: 'pointer'}}>Memories Picture Service</div>
-          </div>
+          <h2>Journal Page</h2>
+          <div style={{marginTop: '24px', fontSize: '1.1rem'}}>Add word document style notebook</div>
         </section>
       </main>
     </div>
   );
 }
 
-export default MemoryServiceHomePage;
+export default JournalPage;

@@ -26,7 +26,11 @@ function MemoryServiceHomePage() {
         </header>
         <section className="section">
           <h2>Memory System Journaling</h2>
-          {/* Blank page, matching style/background */}
+          <div className="card-row">
+            <div className="card" style={{cursor: 'pointer'}}>Journaling</div>
+            <div className="card" style={{cursor: 'pointer'}}>Memories Query Service</div>
+            <div className="card" style={{cursor: 'pointer'}}>Memories Picture Service</div>
+          </div>
         </section>
       </main>
     </div>

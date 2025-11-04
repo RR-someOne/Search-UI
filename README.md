@@ -1,4 +1,4 @@
-# WireFrame-EHS
+# Search UI
 
 This repository contains multiple React applications for the WireFrame EHS platform.
 

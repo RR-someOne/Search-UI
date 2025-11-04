@@ -55,7 +55,7 @@ jobs:
         
     # Upload ESLint results to GitHub Security tab (requires Advanced Security)
     - name: Upload ESLint results
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       if: hashFiles('eslint-results.sarif') != ''
       with:
         sarif_file: eslint-results.sarif

@@ -53,13 +53,14 @@ jobs:
           echo "Scan completed - check eslint-results.sarif for details"
         fi
         
-    # Note: SARIF upload requires GitHub Advanced Security
-    # Uncomment the following step if Advanced Security is available:
-    # - name: Upload ESLint results
-    #   uses: github/codeql-action/upload-sarif@v3
-    #   if: hashFiles('eslint-results.sarif') != ''
-    #   with:
-    #     sarif_file: eslint-results.sarif
+    # Upload ESLint results to GitHub Security tab (requires Advanced Security)
+    - name: Upload ESLint results
+      uses: github/codeql-action/upload-sarif@v3
+      if: hashFiles('eslint-results.sarif') != ''
+      with:
+        sarif_file: eslint-results.sarif
+        wait-for-processing: true
+      continue-on-error: true
         
     # SonarCloud Analysis (uncomment and configure if using SonarCloud)
     # - name: SonarCloud Scan

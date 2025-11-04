@@ -3,32 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search UI</title>
+    <title>Search Tool with Gen AI</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🔍 Search UI</h1>
-            <p>A modern, responsive search interface</p>
-        </header>
-        
-        <main>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Enter your search query..." />
-                <button id="searchButton">Search</button>
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"></circle>
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2"></path>
+                    </svg>
+                    <span class="brand-text">Search Tool with Gen AI</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="#" class="nav-link">Features</a>
+                    <a href="#" class="nav-link">API</a>
+                    <a href="#" class="nav-link">About</a>
+                    <button class="nav-cta">Get Started</button>
+                </div>
             </div>
-            
-            <div id="loadingIndicator" class="loading hidden">
-                <div class="spinner"></div>
-                <span>Searching...</span>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Intelligent search powered by
+                        <span class="gradient-text">artificial intelligence</span>
+                    </h1>
+                    <p class="hero-description">
+                        Experience next-generation search with AI-powered insights, 
+                        natural language processing, and instant intelligent results.
+                    </p>
+                </div>
+                
+                <!-- Search Interface -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <div class="search-input-container">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                class="search-input"
+                                placeholder="What can I help you search for?" 
+                                autocomplete="off"
+                            />
+                            <button id="searchButton" class="search-button" type="button">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"></circle>
+                                    <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="quick-actions">
+                            <button class="quick-action" data-query="latest AI research">
+                                <span class="quick-action-icon">🔬</span>
+                                Latest AI Research
+                            </button>
+                            <button class="quick-action" data-query="technology trends">
+                                <span class="quick-action-icon">📊</span>
+                                Technology Trends
+                            </button>
+                            <button class="quick-action" data-query="development tools">
+                                <span class="quick-action-icon">⚡</span>
+                                Development Tools
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading State -->
+                    <div id="loadingIndicator" class="loading-state hidden">
+                        <div class="loading-spinner"></div>
+                        <span class="loading-text">Searching with AI...</span>
+                    </div>
+                    
+                    <!-- Results -->
+                    <div id="results" class="results-container"></div>
+                </div>
             </div>
-            
-            <div id="results" class="results"></div>
-        </main>
-        
-        <footer>
-            <p>&copy; 2025 Search UI - Powered by GitHub Actions CI/CD</p>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features">
+            <div class="features-container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3 class="feature-title">AI-Powered Intelligence</h3>
+                        <p class="feature-description">Advanced machine learning algorithms provide contextual and relevant search results.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Lightning Fast</h3>
+                        <p class="feature-description">Get instant results with our optimized search infrastructure and real-time processing.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3 class="feature-title">Secure & Private</h3>
+                        <p class="feature-description">Enterprise-grade security with privacy-first design and data protection.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <span class="footer-title">Search Tool with Gen AI</span>
+                        <p class="footer-description">Powered by advanced AI and modern web technologies</p>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-section">
+                            <h4 class="footer-section-title">Product</h4>
+                            <a href="#" class="footer-link">Features</a>
+                            <a href="#" class="footer-link">API</a>
+                            <a href="#" class="footer-link">Pricing</a>
+                        </div>
+                        <div class="footer-section">
+                            <h4 class="footer-section-title">Company</h4>
+                            <a href="#" class="footer-link">About</a>
+                            <a href="#" class="footer-link">Blog</a>
+                            <a href="#" class="footer-link">Careers</a>
+                        </div>
+                        <div class="footer-section">
+                            <h4 class="footer-section-title">Resources</h4>
+                            <a href="#" class="footer-link">Documentation</a>
+                            <a href="#" class="footer-link">Support</a>
+                            <a href="#" class="footer-link">Status</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Search Tool with Gen AI. Built with GitHub Actions CI/CD.</p>
+                </div>
+            </div>
         </footer>
     </div>
     

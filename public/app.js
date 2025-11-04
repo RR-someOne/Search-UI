@@ -1,14 +1,17 @@
-class SearchUI {
+class SearchToolWithGenAI {
     constructor() {
         this.searchInput = document.getElementById('searchInput');
         this.searchButton = document.getElementById('searchButton');
         this.loadingIndicator = document.getElementById('loadingIndicator');
         this.resultsContainer = document.getElementById('results');
+        this.quickActions = document.querySelectorAll('.quick-action');
         
         this.initEventListeners();
+        this.showWelcomeMessage();
     }
     
     initEventListeners() {
+        // Search functionality
         this.searchButton.addEventListener('click', () => this.performSearch());
         this.searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -16,16 +19,38 @@ class SearchUI {
             }
         });
         
-        // Auto-search with debounce
+        // Quick actions
+        this.quickActions.forEach(action => {
+            action.addEventListener('click', (e) => {
+                const query = e.currentTarget.dataset.query;
+                this.searchInput.value = query;
+                this.performSearch();
+            });
+        });
+        
+        // Auto-search with debounce (optional)
         let debounceTimer;
         this.searchInput.addEventListener('input', () => {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                if (this.searchInput.value.trim()) {
+            if (this.searchInput.value.trim().length > 2) {
+                debounceTimer = setTimeout(() => {
                     this.performSearch();
-                }
-            }, 500);
+                }, 800);
+            }
         });
+        
+        // Focus search input on page load
+        this.searchInput.focus();
+    }
+    
+    showWelcomeMessage() {
+        this.resultsContainer.innerHTML = `
+            <div class="no-results">
+                <div style="font-size: 24px; margin-bottom: 16px;">🚀</div>
+                <div style="font-weight: 600; font-size: 18px; margin-bottom: 8px;">Welcome to Search Tool with Gen AI</div>
+                <div>Enter your search query above or try one of the quick actions to get started.</div>
+            </div>
+        `;
     }
     
     async performSearch() {
@@ -66,7 +91,13 @@ class SearchUI {
         if (!results || results.length === 0) {
             this.resultsContainer.innerHTML = `
                 <div class="no-results">
-                    ${query ? `No results found for "${query}"` : 'Enter a search query to get started'}
+                    <div style="font-size: 24px; margin-bottom: 16px;">🔍</div>
+                    <div style="font-weight: 600; font-size: 18px; margin-bottom: 8px;">
+                        ${query ? 'No results found' : 'Ready to search'}
+                    </div>
+                    <div>
+                        ${query ? 'Try different keywords or check your spelling for "' + this.escapeHtml(query) + '"' : 'Enter a search query to discover intelligent results'}
+                    </div>
                 </div>
             `;
             return;
@@ -80,8 +111,9 @@ class SearchUI {
         `).join('');
         
         this.resultsContainer.innerHTML = `
-            <div style="margin-bottom: 20px; color: #666;">
-                Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${this.escapeHtml(query)}"
+            <div class="results-header">
+                <strong>${results.length}</strong> result${results.length !== 1 ? 's' : ''} found for 
+                <strong>"${this.escapeHtml(query)}"</strong> • Generated with AI assistance
             </div>
             ${resultsHTML}
         `;
@@ -104,7 +136,7 @@ class SearchUI {
 
 // Initialize the search UI when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new SearchUI();
+    new SearchToolWithGenAI();
     
     // Add some initial welcome message
     setTimeout(() => {

@@ -77,19 +77,19 @@ The application is automatically deployed when changes are pushed to the `main` 
 
 ## 🔒 Security
 
-- Basic security scanning with npm audit and pattern detection
-- Dependency vulnerability monitoring with Trivy
-- Regular security audits via automated workflows
-- Automated security patches via Dependabot
+- **CodeQL Security Analysis** - Advanced code scanning for vulnerabilities
+- **Dependency Vulnerability Monitoring** - Trivy and npm audit scanning
+- **Secret Scanning** - Automatic detection of exposed secrets
+- **SARIF Integration** - Security results in GitHub Security tab
+- **Regular Security Audits** - Automated weekly scans
+- **Automated Security Patches** - Dependabot dependency updates
 
-### Advanced Security (Optional)
-For enhanced security features, enable **GitHub Advanced Security**:
-1. Go to **Settings** > **Security & analysis**
-2. Enable **Code scanning** 
-3. Enable **Secret scanning**
-4. Uncomment CodeQL workflow triggers in `.github/workflows/codeql.yml`
-
-This enables CodeQL analysis and SARIF result uploads to GitHub Security tab.
+### Security Features
+- 🔍 **CodeQL Analysis** - Weekly automated scans + PR analysis  
+- 🛡️ **Trivy Vulnerability Scanner** - Container and filesystem scanning
+- 🔐 **Secret Detection** - Prevents accidental secret commits
+- 📊 **Security Dashboard** - Centralized security overview in GitHub
+- ⚡ **Real-time Alerts** - Immediate notification of security issues
 
 ## 🤝 Contributing
 

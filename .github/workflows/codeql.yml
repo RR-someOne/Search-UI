@@ -1,19 +1,13 @@
-name: "CodeQL Security Analysis (Requires Advanced Security)"
-
-# DISABLED: Requires GitHub Advanced Security to be enabled
-# Enable Advanced Security in Settings > Security & analysis > Code scanning
-# Then uncomment the following triggers:
-
-# on:
-#   push:
-#     branches: [ "main", "develop" ]
-#   pull_request:
-#     branches: [ "main" ]
-#   schedule:
-#     - cron: '23 14 * * 1' # Weekly scan on Mondays
+name: "CodeQL Security Analysis"
 
 on:
-  workflow_dispatch: # Manual trigger only
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '23 14 * * 1' # Weekly scan on Mondays
+  workflow_dispatch: # Manual trigger
 
 jobs:
   check-permissions:

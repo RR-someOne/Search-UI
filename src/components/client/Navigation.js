@@ -2,15 +2,7 @@ import React from 'react';
 
 const Navigation = () => {
   const sidebarItems = [
-    'Research',
-    'Safety',
-    'For Business', 
-    'For Developers',
-    'ChatGPT',
-    'Sora',
-    'Stories',
-    'Company',
-    'News'
+    'Research'
   ];
 
   return (

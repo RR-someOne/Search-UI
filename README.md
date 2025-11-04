@@ -47,10 +47,6 @@ npm run build
 - GitHub Actions for CI/CD
 - Modern CSS with responsive design
 
-### 2. WireFrame EHS Pages (`wireframealp/`)
-
-Original wireframe application with EHS-specific functionality.
-
 ## Development
 
 This project uses modern React development practices:

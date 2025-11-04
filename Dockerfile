@@ -1,5 +1,5 @@
 # Production build for Node.js application
-FROM node:18-alpine AS production
+FROM node:25-alpine AS production
 
 # Install dumb-init for proper signal handling
 RUN apk add --no-cache dumb-init curl

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search UI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Search UI</h1>
+            <p>A modern, responsive search interface</p>
+        </header>
+        
+        <main>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Enter your search query..." />
+                <button id="searchButton">Search</button>
+            </div>
+            
+            <div id="loadingIndicator" class="loading hidden">
+                <div class="spinner"></div>
+                <span>Searching...</span>
+            </div>
+            
+            <div id="results" class="results"></div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Search UI - Powered by GitHub Actions CI/CD</p>
+        </footer>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

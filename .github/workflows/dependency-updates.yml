@@ -1,0 +1,102 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # Every Monday at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Check for npm updates
+      if: hashFiles('package.json') != ''
+      run: |
+        npx npm-check-updates --target minor --upgrade
+        
+    - name: Install updated dependencies
+      if: hashFiles('package.json') != ''
+      run: npm install
+      
+    - name: Run tests with updated dependencies
+      if: hashFiles('package.json') != ''
+      run: |
+        if npm run test --if-present; then
+          echo "Tests passed with updated dependencies"
+        else
+          echo "Tests failed with updated dependencies"
+          exit 1
+        fi
+        
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: update dependencies'
+        title: 'chore: automated dependency updates'
+        body: |
+          ## Automated Dependency Updates
+          
+          This PR contains automated dependency updates performed by GitHub Actions.
+          
+          ### Changes
+          - Updated npm dependencies to their latest minor versions
+          - All tests are passing with the updated dependencies
+          
+          ### Next Steps
+          - Review the changes
+          - Merge if everything looks good
+          
+          ---
+          *This PR was created automatically by the dependency update workflow*
+        branch: automated-dependency-updates
+        delete-branch: true
+        
+  # Security audit
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      if: hashFiles('package.json') != ''
+      run: npm ci
+      
+    - name: Run security audit
+      if: hashFiles('package.json') != ''
+      run: |
+        npm audit --audit-level=moderate
+        
+    - name: Check for vulnerabilities
+      if: hashFiles('package.json') != ''
+      run: |
+        AUDIT_RESULT=$(npm audit --audit-level=high --json || true)
+        if echo "$AUDIT_RESULT" | jq -e '.metadata.vulnerabilities.high > 0 or .metadata.vulnerabilities.critical > 0' > /dev/null; then
+          echo "High or critical vulnerabilities found!"
+          echo "$AUDIT_RESULT" | jq '.advisories'
+          exit 1
+        else
+          echo "No high or critical vulnerabilities found"
+        fi

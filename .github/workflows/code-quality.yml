@@ -1,0 +1,67 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Shallow clones should be disabled for better analysis
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        if [ -f package.json ]; then
+          npm ci
+        fi
+        
+    # ESLint Analysis
+    - name: Run ESLint
+      run: |
+        if [ -f package.json ] && npm list eslint > /dev/null 2>&1; then
+          npx eslint . --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+        else
+          echo "ESLint not found, skipping"
+        fi
+      continue-on-error: true
+      
+    # Upload ESLint results
+    - name: Upload ESLint results
+      uses: github/codeql-action/upload-sarif@v3
+      if: hashFiles('eslint-results.sarif') != ''
+      with:
+        sarif_file: eslint-results.sarif
+        wait-for-processing: true
+        
+    # SonarCloud Analysis (uncomment and configure if using SonarCloud)
+    # - name: SonarCloud Scan
+    #   uses: SonarSource/sonarcloud-github-action@master
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        
+    # CodeQL Analysis
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript # Change to: python, java, csharp, cpp, go as needed
+        
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+      
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3

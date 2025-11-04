@@ -1,41 +1,31 @@
-# Multi-stage build for Node.js application
-FROM node:18-alpine AS builder
-
-# Set working directory
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci --only=production && npm cache clean --force
-
-# Copy source code
-COPY . .
-
-# Build the application (if build script exists)
-RUN npm run build || echo "No build script found"
-
-# Production stage
+# Production build for Node.js application
 FROM node:18-alpine AS production
 
 # Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+RUN apk add --no-cache dumb-init curl
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001
+    adduser -S nodejs -u 1001
 
 # Set working directory
 WORKDIR /app
 
-# Copy built application from builder stage
-COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nextjs:nodejs /app/package*.json ./
+# Copy package files first for better caching
+COPY package*.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy application source code
+COPY --chown=nodejs:nodejs server.js ./
+COPY --chown=nodejs:nodejs public/ ./public/
+
+# Create any necessary directories
+RUN mkdir -p ./public && chown -R nodejs:nodejs ./public
 
 # Switch to non-root user
-USER nextjs
+USER nodejs
 
 # Expose port
 EXPOSE 3000

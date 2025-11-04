@@ -77,12 +77,23 @@ jobs:
         output: 'trivy-results.sarif'
       continue-on-error: true
         
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v3
+    - name: Display Trivy scan results
       if: always() && hashFiles('trivy-results.sarif') != ''
-      with:
-        sarif_file: 'trivy-results.sarif'
-      continue-on-error: true
+      run: |
+        echo "🔍 Trivy Security Scan Results:"
+        if command -v jq >/dev/null 2>&1; then
+          jq -r '.runs[0].results[]? | "- \(.ruleId): \(.message.text)"' trivy-results.sarif || echo "No vulnerabilities found"
+        else
+          echo "Scan completed - check trivy-results.sarif for details"
+        fi
+        
+    # Note: SARIF upload requires GitHub Advanced Security
+    # Uncomment the following step if Advanced Security is available:
+    # - name: Upload Trivy scan results to GitHub Security tab
+    #   uses: github/codeql-action/upload-sarif@v3
+    #   if: always() && hashFiles('trivy-results.sarif') != ''
+    #   with:
+    #     sarif_file: 'trivy-results.sarif'
 
   # Continuous Deployment (only on main branch)
   deploy:

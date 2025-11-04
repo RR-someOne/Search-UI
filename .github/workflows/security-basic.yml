@@ -1,0 +1,60 @@
+name: "Basic Security Analysis"
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    name: Basic Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        if [ -f package.json ]; then
+          npm ci
+        fi
+        
+    - name: Run npm audit
+      run: |
+        echo "🔍 Running npm security audit..."
+        npm audit --audit-level=moderate || true
+        
+    - name: Check for common security issues
+      run: |
+        echo "🔍 Checking for common security patterns..."
+        
+        # Check for hardcoded secrets
+        echo "Checking for potential secrets..."
+        grep -r -i "password\|secret\|token\|key" --include="*.js" --include="*.json" . || echo "No obvious secrets found"
+        
+        # Check for eval usage
+        echo "Checking for dangerous eval usage..."
+        grep -r "eval(" --include="*.js" . && echo "⚠️  Found eval() usage - security risk!" || echo "✅ No eval() usage found"
+        
+        # Check for unsafe innerHTML
+        echo "Checking for unsafe innerHTML usage..."
+        grep -r "innerHTML" --include="*.js" . && echo "⚠️  Found innerHTML usage - potential XSS risk!" || echo "✅ No innerHTML usage found"
+        
+        # Check for HTTP instead of HTTPS
+        echo "Checking for HTTP URLs..."
+        grep -r "http://" --include="*.js" --include="*.json" . && echo "⚠️  Found HTTP URLs - consider HTTPS!" || echo "✅ No HTTP URLs found"
+        
+    - name: Security Summary
+      run: |
+        echo "🛡️ Basic Security Scan Complete"
+        echo "For advanced security analysis, enable GitHub Advanced Security"
+        echo "and use CodeQL in Settings > Security & analysis"

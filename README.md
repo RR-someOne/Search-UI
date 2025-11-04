@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# WireFrame-EHS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains multiple React applications for the WireFrame EHS platform.
 
-## Available Scripts
+## Projects
 
-In the project directory, you can run:
+### 1. Search UI with OpenAI-Style Interface
 
-### `npm start`
+A modern AI-powered search interface built with React, featuring:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **OpenAI ChatGPT-style UI**: Clean, minimal design with left sidebar navigation
+- **Intelligent Search**: AI-powered search functionality with comprehensive edge case handling
+- **Comprehensive Testing**: 60+ test cases with CI/CD pipeline
+- **Accessibility**: Full screen reader support and keyboard navigation
+- **Responsive Design**: Works seamlessly across all device types
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#### Features
+- Empty query validation with visual feedback
+- Quick action buttons for common searches
+- Real-time search with loading states
+- Professional error handling and user feedback
+- GitHub Actions CI/CD pipeline
 
-### `npm test`
+#### Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+# Install dependencies
+npm install
 
-### `npm run build`
+# Start development server
+npm start
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Run tests
+npm test
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Run tests in CI mode
+npm run test:ci
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Build for production
+npm run build
+```
 
-### `npm run eject`
+#### Technology Stack
+- React 19.2.0
+- Create React App
+- Jest & React Testing Library
+- GitHub Actions for CI/CD
+- Modern CSS with responsive design
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 2. WireFrame EHS Pages (`wireframealp/`)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Original wireframe application with EHS-specific functionality.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Development
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This project uses modern React development practices:
 
-## Learn More
+- Component-based architecture
+- Comprehensive test coverage
+- Automated CI/CD pipeline
+- Professional code quality standards
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deployment
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The applications are ready for deployment with:
+- Production-optimized builds
+- Automated testing pipeline
+- Docker containerization support (via GitHub Actions)
+- Professional error handling

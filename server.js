@@ -42,13 +42,16 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-    // eslint-disable-next-line no-console
-    console.log(`🚀 Search UI server running on port ${PORT}`);
-    // eslint-disable-next-line no-console
-    console.log(`📊 Health check: http://localhost:${PORT}/health`);
-    // eslint-disable-next-line no-console
-    console.log(`🔍 Search API: http://localhost:${PORT}/api/search?q=your-query`);
-});
+// Only start the server if this file is run directly
+if (require.main === module) {
+    app.listen(PORT, () => {
+        // eslint-disable-next-line no-console
+        console.log(`🚀 Search UI server running on port ${PORT}`);
+        // eslint-disable-next-line no-console
+        console.log(`📊 Health check: http://localhost:${PORT}/health`);
+        // eslint-disable-next-line no-console
+        console.log(`🔍 Search API: http://localhost:${PORT}/api/search?q=your-query`);
+    });
+}
 
 module.exports = app;

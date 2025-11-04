@@ -1,0 +1,21 @@
+# CodeQL ignore patterns
+# Exclude node_modules and build outputs
+node_modules/
+dist/
+build/
+coverage/
+*.min.js
+
+# Exclude test files from security analysis
+test/
+**/*.test.js
+**/*.spec.js
+
+# Exclude configuration files
+jest.config.js
+.eslintrc.json
+package-lock.json
+
+# Exclude documentation
+README.md
+docs/

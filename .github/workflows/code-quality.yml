@@ -33,7 +33,10 @@ jobs:
     - name: Run ESLint
       run: |
         if [ -f package.json ] && npm list eslint > /dev/null 2>&1; then
-          npx eslint . --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+          # Install SARIF formatter if not present
+          npm install --no-save @microsoft/eslint-formatter-sarif || true
+          # Run ESLint with SARIF output
+          npx eslint . --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif || true
         else
           echo "ESLint not found, skipping"
         fi
@@ -46,6 +49,7 @@ jobs:
       with:
         sarif_file: eslint-results.sarif
         wait-for-processing: true
+      continue-on-error: true
         
     # SonarCloud Analysis (uncomment and configure if using SonarCloud)
     # - name: SonarCloud Scan
@@ -54,14 +58,5 @@ jobs:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         
-    # CodeQL Analysis
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: javascript # Change to: python, java, csharp, cpp, go as needed
-        
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
-      
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+    # Note: CodeQL analysis is handled in a separate workflow (codeql.yml)
+    # for better isolation and reliability

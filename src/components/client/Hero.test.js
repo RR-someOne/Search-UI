@@ -2,45 +2,44 @@ import { render, screen } from '@testing-library/react';
 import Hero from './Hero';
 
 describe('Hero Component', () => {
-  test('renders hero title', () => {
+  test('renders finance hero title', () => {
     render(<Hero />);
     
-    expect(screen.getByText(/Intelligent search powered by/i)).toBeInTheDocument();
-    expect(screen.getByText(/artificial intelligence/i)).toBeInTheDocument();
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument();
   });
 
-  test('renders hero description', () => {
-    render(<Hero />);
-    
-    const description = screen.getByText(/Experience next-generation search with AI-powered insights/i);
-    expect(description).toBeInTheDocument();
-  });
-
-  test('hero title has correct structure with gradient text', () => {
+  test('hero title has correct structure', () => {
     render(<Hero />);
     
     const title = screen.getByRole('heading', { level: 1 });
     expect(title).toHaveClass('hero-title');
-    
-    const gradientText = screen.getByText('artificial intelligence');
-    expect(gradientText).toHaveClass('gradient-text');
+    expect(title).toHaveTextContent('Finance Search Tool');
   });
 
   test('renders complete hero section structure', () => {
     render(<Hero />);
     
-    // Test that both title and description are present together
+    // Test that hero section and title are present
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-    expect(screen.getByText(/Experience next-generation search/i)).toBeInTheDocument();
+    
+    // Verify the hero container structure
+    const heroElement = screen.getByRole('heading', { level: 1 }).closest('.hero');
+    expect(heroElement).toBeInTheDocument();
   });
 
-  test('hero description mentions key features', () => {
+  test('hero focuses on finance functionality', () => {
     render(<Hero />);
     
-    const description = screen.getByText(/natural language processing/i);
-    expect(description).toBeInTheDocument();
+    const title = screen.getByRole('heading', { level: 1 });
+    expect(title).toHaveTextContent('Finance Search Tool');
+  });
+
+  test('hero component has proper semantic structure', () => {
+    render(<Hero />);
     
-    const instantResults = screen.getByText(/instant intelligent results/i);
-    expect(instantResults).toBeInTheDocument();
+    // Check that heading is properly structured
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveClass('hero-title');
   });
 });

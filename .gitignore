@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+src/server/node_modules/
 
 # testing
 /coverage
@@ -21,3 +22,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Server specific
+src/server/server.log
+src/server/.env
+src/server/package-lock.json

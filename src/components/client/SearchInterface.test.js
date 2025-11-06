@@ -59,8 +59,8 @@ describe('SearchInterface Component', () => {
   test('renders search input and button', () => {
     renderSearchInterface();
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
-    const searchButton = screen.getByRole('button', { name: /search/i });
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
+    const searchButton = screen.getByRole('button', { name: /Please enter a search query/i });
     
     expect(searchInput).toBeInTheDocument();
     expect(searchButton).toBeInTheDocument();
@@ -69,28 +69,28 @@ describe('SearchInterface Component', () => {
   test('renders quick action buttons', () => {
     renderSearchInterface();
     
-    expect(screen.getByText('Latest AI Research')).toBeInTheDocument();
-    expect(screen.getByText('Technology Trends')).toBeInTheDocument();
-    expect(screen.getByText('Development Tools')).toBeInTheDocument();
+    expect(screen.getByText('Stock Analysis')).toBeInTheDocument();
+    expect(screen.getByText('Market Trends')).toBeInTheDocument();
+    expect(screen.getByText('Investment Strategy')).toBeInTheDocument();
   });
 
   test('displays welcome message initially', () => {
     renderSearchInterface();
     
-    expect(screen.getByText('Welcome to Search Tool with Gen AI')).toBeInTheDocument();
-    expect(screen.getByText('Enter your search query above or try one of the quick actions to get started.')).toBeInTheDocument();
+    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
+    expect(screen.getByText('Ask me about stocks, market trends, investment strategies, or any financial topic.')).toBeInTheDocument();
   });
 
   test('updates search input value when typing', async () => {
     const { unmount } = renderSearchInterface();
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     
     // Ensure clean state
     await userEvent.clear(searchInput);
-    await userEvent.type(searchInput, 'test query');
+    await userEvent.type(searchInput, 'AAPL stock analysis');
     
-    expect(searchInput).toHaveValue('test query');
+    expect(searchInput).toHaveValue('AAPL stock analysis');
     
     // Clean up
     unmount();
@@ -98,26 +98,36 @@ describe('SearchInterface Component', () => {
 
   test('performs search when search button is clicked', async () => {
     const mockResponse = {
-      results: [
-        { title: 'Test Result', snippet: 'Test snippet' }
-      ]
+      response: 'Finance analysis response',
+      data: { stocks: [] },
+      sources: ['Test'],
+      suggestions: []
     };
     
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => mockResponse,
     });
 
     const { unmount } = render(<SearchInterface />);
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
-    const searchButton = screen.getByRole('button', { name: /search/i });
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
+    const searchButton = screen.getByRole('button', { name: /Please enter a search query/i });
     
     // Clear the input first to ensure clean state
     await userEvent.clear(searchInput);
-    await userEvent.type(searchInput, 'test query');
+    await userEvent.type(searchInput, 'AAPL stock analysis');
     await userEvent.click(searchButton);
     
-    expect(mockFetch).toHaveBeenCalledWith('/api/search?q=test%20query');
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:5001/api/finance/search', expect.objectContaining({
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: 'AAPL stock analysis',
+        context: 'search',
+        includeData: true
+      })
+    }));
     
     // Clean up
     unmount();
@@ -136,7 +146,7 @@ describe('SearchInterface Component', () => {
 
     const { unmount } = render(<SearchInterface />);
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     
     // Clear and type fresh
     await userEvent.clear(searchInput);
@@ -160,7 +170,7 @@ describe('SearchInterface Component', () => {
 
     render(<SearchInterface />);
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     const searchButton = screen.getByRole('button', { name: /search/i });
     
     await userEvent.type(searchInput, 'test query');
@@ -183,7 +193,7 @@ describe('SearchInterface Component', () => {
 
     const { unmount } = render(<SearchInterface />);
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     const searchButton = screen.getByRole('button', { name: /search/i });
     
     await userEvent.clear(searchInput);
@@ -211,7 +221,7 @@ describe('SearchInterface Component', () => {
 
     const { unmount } = render(<SearchInterface />);
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     const searchButton = screen.getByRole('button', { name: /search/i });
     
     // Clear and search with fresh state
@@ -250,7 +260,7 @@ describe('SearchInterface Component', () => {
     
     expect(fetch).toHaveBeenCalledWith('/api/search?q=latest%20AI%20research');
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     expect(searchInput).toHaveValue('latest AI research');
   });
 
@@ -261,7 +271,7 @@ describe('SearchInterface Component', () => {
 
     render(<SearchInterface />);
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     const searchButton = screen.getByRole('button', { name: /search/i });
     
     await userEvent.type(searchInput, 'test query');
@@ -277,7 +287,7 @@ describe('SearchInterface Component', () => {
   test('does not perform search with empty query', async () => {
     const { unmount } = render(<SearchInterface />);
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     const searchButton = screen.getByRole('button', { name: /search/i });
     
     // Ensure input is empty

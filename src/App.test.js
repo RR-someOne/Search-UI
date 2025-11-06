@@ -2,35 +2,34 @@ import { render, screen } from '@testing-library/react';
 import App from './App';
 
 describe('App Component', () => {
-  test('renders the main application', () => {
+  test('renders the main finance application', () => {
     render(<App />);
     
-    // Check if main components are rendered
-    expect(screen.getAllByText('Search Tool with Gen AI')).toHaveLength(2);
-    expect(screen.getByText('What Can I help you with?')).toBeInTheDocument();
+    // Check if main components are rendered (OpenAI-style finance app)
+    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2); // Appears in nav and hero
+    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
   });
 
-  test('renders navigation menu', () => {
+  test('renders OpenAI-style sidebar navigation', () => {
     render(<App />);
     
-    // Use getAllByText since Features appears in both nav and footer
-    expect(screen.getAllByText('Features')).toHaveLength(2);
-    expect(screen.getAllByText('API')).toHaveLength(2);
-    expect(screen.getAllByText('About')).toHaveLength(2);
-    expect(screen.getByText('Get Started')).toBeInTheDocument();
+    // Sidebar navigation elements
+    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2);
+    expect(screen.getByText('Research')).toBeInTheDocument();
+    expect(screen.getByText('Log in')).toBeInTheDocument();
   });
 
-  test('renders search interface', () => {
+  test('renders finance search interface', () => {
     render(<App />);
     
-    const searchInput = screen.getByPlaceholderText('What can I help you search for?');
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     expect(searchInput).toBeInTheDocument();
   });
 
-  test('renders hero section', () => {
+  test('renders finance-focused hero section', () => {
     render(<App />);
     
-    expect(screen.getByText(/Intelligent search powered by/i)).toBeInTheDocument();
-    expect(screen.getByText(/artificial intelligence/i)).toBeInTheDocument();
+    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2);
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
   });
 });

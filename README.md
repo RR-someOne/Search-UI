@@ -1,4 +1,4 @@
-# WireFrame-EHS
+# Search UI
 
 This repository contains multiple React applications for the WireFrame EHS platform.
 
@@ -46,10 +46,6 @@ npm run build
 - Jest & React Testing Library
 - GitHub Actions for CI/CD
 - Modern CSS with responsive design
-
-### 2. WireFrame EHS Pages (`wireframealp/`)
-
-Original wireframe application with EHS-specific functionality.
 
 ## Development
 

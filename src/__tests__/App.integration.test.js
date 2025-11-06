@@ -50,7 +50,7 @@ describe('App Integration Tests', () => {
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'AAPL stock analysis');
     
-    const searchButton = screen.getByRole('button', { name: '' }); // Search button has no accessible name currently
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     await userEvent.click(searchButton);
     
     // Verify search was called with finance API
@@ -170,7 +170,7 @@ describe('App Integration Tests', () => {
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'test query');
     
-    const searchButton = screen.getByRole('button', { name: '' }); // Search button has no accessible name currently
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     await userEvent.click(searchButton);
     
     await waitFor(() => {
@@ -217,7 +217,7 @@ describe('App Integration Tests', () => {
     expect(searchInput).toHaveAttribute('placeholder');
     expect(searchInput.getAttribute('placeholder')).toBe('Ask about stocks, market trends, or financial analysis...');
     
-    const searchButton = screen.getByRole('button', { name: '' }); // Search button has no accessible name currently
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     expect(searchButton).toBeInTheDocument();
     
     // Check navigation accessibility (OpenAI-style sidebar)

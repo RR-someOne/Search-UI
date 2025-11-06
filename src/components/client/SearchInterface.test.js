@@ -60,7 +60,7 @@ describe('SearchInterface Component', () => {
     renderSearchInterface();
     
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    const searchButton = screen.getByRole('button', { name: /Please enter a search query/i });
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     
     expect(searchInput).toBeInTheDocument();
     expect(searchButton).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe('SearchInterface Component', () => {
     const { unmount } = render(<SearchInterface />);
     
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    const searchButton = screen.getByRole('button', { name: /Please enter a search query/i });
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     
     // Clear the input first to ensure clean state
     await userEvent.clear(searchInput);
@@ -135,12 +135,14 @@ describe('SearchInterface Component', () => {
 
   test('performs search when Enter key is pressed', async () => {
     const mockResponse = {
-      results: [
-        { title: 'Test Result', snippet: 'Test snippet' }
-      ]
+      response: 'Finance analysis response',
+      data: { stocks: [] },
+      sources: ['Test'],
+      suggestions: []
     };
     
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => mockResponse,
     });
 
@@ -152,7 +154,15 @@ describe('SearchInterface Component', () => {
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'test query{enter}');
     
-    expect(mockFetch).toHaveBeenCalledWith('/api/search?q=test%20query');
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:5001/api/finance/search', expect.objectContaining({
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: 'test query',
+        context: 'search',
+        includeData: true
+      })
+    }));
     
     // Clean up
     unmount();
@@ -160,10 +170,11 @@ describe('SearchInterface Component', () => {
 
   test('shows loading state during search', async () => {
     // Mock a slow response
-    fetch.mockImplementationOnce(() => 
+    mockFetch.mockImplementationOnce(() => 
       new Promise(resolve => 
         setTimeout(() => resolve({
-          json: async () => ({ results: [] })
+          ok: true,
+          json: async () => ({ response: 'test', data: null, sources: [], suggestions: [] })
         }), 100)
       )
     );
@@ -171,7 +182,7 @@ describe('SearchInterface Component', () => {
     render(<SearchInterface />);
     
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    const searchButton = screen.getByRole('button', { name: /search/i });
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     
     await userEvent.type(searchInput, 'test query');
     await userEvent.click(searchButton);
@@ -181,48 +192,52 @@ describe('SearchInterface Component', () => {
 
   test('displays search results after successful search', async () => {
     const mockResponse = {
-      results: [
-        { title: 'Test Result 1', snippet: 'Test snippet 1' },
-        { title: 'Test Result 2', snippet: 'Test snippet 2' }
-      ]
+      response: 'Finance analysis for test query',
+      data: { stocks: [] },
+      sources: ['Test Source'],
+      suggestions: []
     };
     
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => mockResponse,
     });
 
     const { unmount } = render(<SearchInterface />);
     
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    const searchButton = screen.getByRole('button', { name: /search/i });
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'test query');
     await userEvent.click(searchButton);
     
     await waitFor(() => {
-      expect(screen.getByText('Test Result 1')).toBeInTheDocument();
+      expect(screen.getByText('Financial Analysis: test query')).toBeInTheDocument();
     });
     
-    expect(screen.getByText('Test Result 2')).toBeInTheDocument();
-    expect(screen.getByText('Test snippet 1')).toBeInTheDocument();
-    expect(screen.getByText('Test snippet 2')).toBeInTheDocument();
+    expect(screen.getByText('Finance analysis for test query')).toBeInTheDocument();
+    expect(screen.getByText((content, element) => {
+      // Look for text that contains "1 result found for" - the text might be split across elements
+      return element && element.className === 'results-header' && content.includes('result found for');
+    })).toBeInTheDocument();
     
     // Clean up
     unmount();
   });
 
-  test('displays no results message when search returns empty', async () => {
-    const mockResponse = { results: [] };
+  test('displays search results even with empty response', async () => {
+    const mockResponse = { response: '', data: null, sources: [], suggestions: [] };
     
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => mockResponse,
     });
 
     const { unmount } = render(<SearchInterface />);
     
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    const searchButton = screen.getByRole('button', { name: /search/i });
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     
     // Clear and search with fresh state
     await userEvent.clear(searchInput);
@@ -230,12 +245,12 @@ describe('SearchInterface Component', () => {
     await userEvent.click(searchButton);
     
     await waitFor(() => {
-      expect(screen.getByText('No results found')).toBeInTheDocument();
+      expect(screen.getByText('Financial Analysis: test query')).toBeInTheDocument();
     });
     
-    // Use a more flexible text matcher
+    // The component should still show the result header even with empty response
     expect(screen.getByText((content, element) => {
-      return content.includes('Try different keywords') && content.includes('test query');
+      return element && element.className === 'results-header' && content.includes('result found for');
     })).toBeInTheDocument();
     
     // Clean up
@@ -244,41 +259,56 @@ describe('SearchInterface Component', () => {
 
   test('quick action buttons trigger search with predefined queries', async () => {
     const mockResponse = {
-      results: [
-        { title: 'AI Research Result', snippet: 'AI research snippet' }
-      ]
+      response: 'Stock analysis response',
+      data: { stocks: [] },
+      sources: ['Test'],
+      suggestions: []
     };
     
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => mockResponse,
     });
 
     render(<SearchInterface />);
     
-    const aiResearchButton = screen.getByText('Latest AI Research');
-    await userEvent.click(aiResearchButton);
+    const stockAnalysisButton = screen.getByText('Stock Analysis');
+    await userEvent.click(stockAnalysisButton);
     
-    expect(fetch).toHaveBeenCalledWith('/api/search?q=latest%20AI%20research');
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:5001/api/finance/search', expect.objectContaining({
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: 'analyze AAPL stock performance',
+        context: 'search',
+        includeData: true
+      })
+    }));
     
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    expect(searchInput).toHaveValue('latest AI research');
+    expect(searchInput).toHaveValue('analyze AAPL stock performance');
   });
 
   test('handles search errors gracefully', async () => {
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     
-    fetch.mockRejectedValueOnce(new Error('Network error'));
+    mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
     render(<SearchInterface />);
     
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    const searchButton = screen.getByRole('button', { name: /search/i });
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     
     await userEvent.type(searchInput, 'test query');
     await userEvent.click(searchButton);
     
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith('Search error:', expect.any(Error));
+      expect(consoleSpy).toHaveBeenCalledWith('Finance search error:', expect.any(Error));
+    });
+    
+    // Check that fallback results are shown
+    await waitFor(() => {
+      expect(screen.getByText('Finance Search: test query')).toBeInTheDocument();
     });
     
     consoleSpy.mockRestore();
@@ -288,14 +318,14 @@ describe('SearchInterface Component', () => {
     const { unmount } = render(<SearchInterface />);
     
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    const searchButton = screen.getByRole('button', { name: /search/i });
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     
     // Ensure input is empty
     await userEvent.clear(searchInput);
     await userEvent.click(searchButton);
     
     expect(mockFetch).not.toHaveBeenCalled();
-    expect(screen.getByText('Welcome to Search Tool with Gen AI')).toBeInTheDocument();
+    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
     
     // Clean up
     unmount();

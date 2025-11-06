@@ -1,27 +1,37 @@
 import { render, screen } from '@testing-library/react';
 import Navigation from './Navigation';
+import { AuthProvider } from '../../contexts/AuthContext';
+
+// Mock the useAuth hook functionality for testing
+const renderWithAuthProvider = (component) => {
+  return render(
+    <AuthProvider>
+      {component}
+    </AuthProvider>
+  );
+};
 
 describe('Navigation Component', () => {
   test('renders OpenAI-style sidebar brand', () => {
-    render(<Navigation />);
+    renderWithAuthProvider(<Navigation />);
     
     expect(screen.getByText('Finance Search Tool')).toBeInTheDocument();
   });
 
   test('renders sidebar navigation menu', () => {
-    render(<Navigation />);
+    renderWithAuthProvider(<Navigation />);
     
     expect(screen.getByText('Research')).toBeInTheDocument();
   });
 
   test('navigation links have correct href attributes', () => {
-    render(<Navigation />);
+    renderWithAuthProvider(<Navigation />);
     
     expect(screen.getByRole('link', { name: 'Research' })).toHaveAttribute('href', '#research');
   });
 
-  test('renders login button', () => {
-    render(<Navigation />);
+  test('renders login button when not authenticated', () => {
+    renderWithAuthProvider(<Navigation />);
     
     const loginButton = screen.getByText('Log in');
     expect(loginButton.tagName).toBe('BUTTON');
@@ -29,7 +39,7 @@ describe('Navigation Component', () => {
   });
 
   test('sidebar has correct CSS structure', () => {
-    render(<Navigation />);
+    renderWithAuthProvider(<Navigation />);
     
     const nav = screen.getByRole('navigation');
     expect(nav).toHaveClass('sidebar');
@@ -41,7 +51,7 @@ describe('Navigation Component', () => {
   });
 
   test('brand text has proper styling', () => {
-    render(<Navigation />);
+    renderWithAuthProvider(<Navigation />);
     
     const brandText = screen.getByText('Finance Search Tool');
     expect(brandText).toHaveClass('brand-text');

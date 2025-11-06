@@ -93,7 +93,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
 
   return (
     <div className="google-login-container">
-      <div id="google-login-button"></div>
+      <div id="google-login-button" data-testid="google-login-button"></div>
     </div>
   );
 };

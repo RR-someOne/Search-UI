@@ -4,15 +4,16 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navigation from './components/client/Navigation';
 import Hero from './components/client/Hero';
 import SearchInterface from './components/client/SearchInterface';
-import LoginPage from './components/auth/LoginPage';
+import LoginModal from './components/auth/LoginModal';
+import PopupLoginPage from './components/auth/PopupLoginPage';
 
 const AppContent = () => {
   const { isAuthenticated, isLoading } = useAuth();
-  const [showLogin, setShowLogin] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const handleShowLogin = () => {
-      setShowLogin(true);
+      setShowLoginModal(true);
     };
 
     window.addEventListener('showLogin', handleShowLogin);
@@ -23,9 +24,13 @@ const AppContent = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      setShowLogin(false);
+      setShowLoginModal(false);
     }
   }, [isAuthenticated]);
+
+  const handleCloseLoginModal = () => {
+    setShowLoginModal(false);
+  };
 
   if (isLoading) {
     return (
@@ -33,14 +38,6 @@ const AppContent = () => {
         <div className="loading-container">
           <div className="loading-spinner">Loading...</div>
         </div>
-      </div>
-    );
-  }
-
-  if (showLogin && !isAuthenticated) {
-    return (
-      <div className="App">
-        <LoginPage />
       </div>
     );
   }
@@ -54,6 +51,11 @@ const AppContent = () => {
           <SearchInterface />
         </div>
       </main>
+      
+      {/* Login Modal */}
+      <LoginModal isOpen={showLoginModal} onClose={handleCloseLoginModal}>
+        <PopupLoginPage onClose={handleCloseLoginModal} />
+      </LoginModal>
     </div>
   );
 };

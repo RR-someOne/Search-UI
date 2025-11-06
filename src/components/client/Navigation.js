@@ -1,9 +1,18 @@
 import React from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import UserProfile from '../auth/UserProfile';
 
 const Navigation = () => {
+  const { isAuthenticated } = useAuth();
+  
   const sidebarItems = [
     'Research'
   ];
+
+  const handleLoginClick = () => {
+    // This will trigger showing the login page in the main app
+    window.dispatchEvent(new CustomEvent('showLogin'));
+  };
 
   return (
     <nav className="sidebar">
@@ -20,7 +29,13 @@ const Navigation = () => {
         ))}
       </div>
       <div className="sidebar-footer">
-        <button className="sidebar-login">Log in</button>
+        {isAuthenticated ? (
+          <UserProfile />
+        ) : (
+          <button className="sidebar-login" onClick={handleLoginClick}>
+            Log in
+          </button>
+        )}
       </div>
     </nav>
   );

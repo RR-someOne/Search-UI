@@ -1,10 +1,10 @@
-# Finance GPT API 🏦📈
+# Finance GPT API
 
 A sophisticated financial analysis API powered by Large Language Models (LLM) for intelligent financial searches, stock analysis, and market insights.
 
 ## Features
 
-### 🎯 Core Capabilities
+### Core Capabilities
 - **Intelligent Financial Search**: AI-powered responses to financial queries
 - **Stock Analysis**: Comprehensive stock performance analysis with real-time data
 - **Market Insights**: Market trends, sector analysis, and economic indicators
@@ -12,7 +12,7 @@ A sophisticated financial analysis API powered by Large Language Models (LLM) fo
 - **News Sentiment**: Financial news analysis with sentiment scoring
 - **Economic Indicators**: GDP, CPI, unemployment data with AI interpretation
 
-### 🚀 Technical Features
+### Technical Features
 - **OpenAI Integration**: GPT-4 powered financial analysis
 - **Rate Limiting**: Protection against API abuse
 - **CORS Support**: Cross-origin resource sharing for web applications
@@ -226,4 +226,3 @@ For issues and questions:
 
 ---
 
-**Built with ❤️ for intelligent financial analysis**

@@ -40,15 +40,15 @@ describe('App Component', () => {
     render(<App />);
     
     // Check if main components are rendered (OpenAI-style finance app)
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2); // Appears in nav and hero
-    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
+    expect(screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...')).toBeInTheDocument();
   });
 
   test('renders OpenAI-style sidebar navigation', () => {
     render(<App />);
     
     // Sidebar navigation elements
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2);
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
     expect(screen.getByText('Research')).toBeInTheDocument();
     expect(screen.getByText('Log in')).toBeInTheDocument();
   });
@@ -60,11 +60,12 @@ describe('App Component', () => {
     expect(searchInput).toBeInTheDocument();
   });
 
-  test('renders finance-focused hero section', () => {
+  test('renders main application layout', () => {
     render(<App />);
     
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2);
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
+    expect(searchInput).toBeInTheDocument();
   });
 
   test('shows loading state when isLoading is true', () => {
@@ -95,7 +96,7 @@ describe('App Component', () => {
     render(<App />);
     
     // Initially should show main app and no modal
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2);
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
     expect(screen.queryByText('Log in or sign up')).not.toBeInTheDocument();
     
     // Trigger the showLogin event
@@ -145,7 +146,7 @@ describe('App Component', () => {
     
     // Should still show main app and modal should be hidden
     await waitFor(() => {
-      expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2);
+      expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
     });
     
     // Login modal should no longer be visible

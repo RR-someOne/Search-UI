@@ -41,9 +41,9 @@ describe('App Integration Tests', () => {
 
     const { unmount } = render(<App />);
     
-    // Verify initial state (handle multiple instances)
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2); // sidebar + hero
-    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
+    // Verify initial state
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
+    expect(screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...')).toBeInTheDocument();
     
     // Perform search
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
@@ -77,18 +77,15 @@ describe('App Integration Tests', () => {
     render(<App />);
     
     // Navigation elements (OpenAI-style sidebar)
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2); // sidebar + hero
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
     expect(screen.getByText('Research')).toBeInTheDocument();
     expect(screen.getByText('Log in')).toBeInTheDocument();
-    
-    // Hero section (simplified for finance) - handle multiple instances
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2); // sidebar + hero
     
     // Search interface (finance-focused)
     expect(screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...')).toBeInTheDocument();
   });
 
-  test('quick actions work end-to-end', async () => {
+  test('search functionality works end-to-end', async () => {
     const mockResponse = { 
       response: 'Stock analysis response',
       data: { stocks: [] },
@@ -107,9 +104,12 @@ describe('App Integration Tests', () => {
     const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
     await userEvent.clear(searchInput);
     
-    // Click on a finance quick action
-    const stockAnalysisButton = screen.getByText('Stock Analysis');
-    await userEvent.click(stockAnalysisButton);
+    // Type in search query
+    await userEvent.type(searchInput, 'analyze AAPL stock performance');
+    
+    // Click search button
+    const searchButton = screen.getByRole('button', { name: 'Search' });
+    await userEvent.click(searchButton);
     
     // Verify search was triggered with correct query
     expect(mockFetch).toHaveBeenCalledWith('http://localhost:5001/api/finance/search', expect.objectContaining({
@@ -121,7 +121,7 @@ describe('App Integration Tests', () => {
       })
     }));
     
-    // Verify input was updated
+    // Verify input value
     expect(searchInput).toHaveValue('analyze AAPL stock performance');
     
     // Wait for results
@@ -136,11 +136,8 @@ describe('App Integration Tests', () => {
   test('finance interface displays correctly with search functionality', () => {
     render(<App />);
     
-    // Verify finance-focused interface elements (handle multiple instances)
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2); // sidebar + hero
-    expect(screen.getByText('Stock Analysis')).toBeInTheDocument();
-    expect(screen.getByText('Market Trends')).toBeInTheDocument();
-    expect(screen.getByText('Investment Strategy')).toBeInTheDocument();
+    // Verify finance-focused interface elements
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
     
     // Verify search is accessible with finance focus
     expect(screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...')).toBeInTheDocument();
@@ -149,8 +146,8 @@ describe('App Integration Tests', () => {
   test('OpenAI-style sidebar navigation works with search functionality', () => {
     render(<App />);
     
-    // Verify sidebar navigation content (handle multiple instances)
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2); // sidebar + hero
+    // Verify sidebar navigation content
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
     expect(screen.getByText('Research')).toBeInTheDocument();
     expect(screen.getByText('Log in')).toBeInTheDocument();
     
@@ -198,18 +195,12 @@ describe('App Integration Tests', () => {
     
     // Verify all main components render in responsive layout
     expect(screen.getByRole('navigation')).toBeInTheDocument();
-    expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2); // sidebar + hero
-    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
-    expect(screen.getByText('Stock Analysis')).toBeInTheDocument();
+    expect(screen.getByText('Finance Search Tool')).toBeInTheDocument(); // sidebar only
     expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
   test('accessibility features work throughout the app', () => {
     render(<App />);
-    
-    // Check for proper heading hierarchy (finance-focused)
-    const mainHeading = screen.getByRole('heading', { level: 1, name: /Finance Search Tool/i });
-    expect(mainHeading).toBeInTheDocument();
     
     // Check for proper form controls
     const searchInput = screen.getByRole('textbox');

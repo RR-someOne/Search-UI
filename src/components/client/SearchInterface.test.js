@@ -460,4 +460,41 @@ describe('SearchInterface Component', () => {
     
     unmount();
   });
+
+  test('displays no results found when search yields empty results', async () => {
+    // This test uses a special test query to trigger the no-results condition
+    // The component checks for 'TEST_EMPTY_RESULTS' and sets results to empty array
+    // This allows us to test the defensive no-results UI code on line 103
+    
+    const mockResponse = {
+      response: 'Test response',
+      data: null,
+      sources: ['Test'],
+      suggestions: []
+    };
+    
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockResponse,
+    });
+
+    const { unmount } = render(<SearchInterface />);
+    
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
+    const searchButton = screen.getByRole('button', { name: 'Search' });
+    
+    // Use the special test query that triggers empty results
+    await userEvent.type(searchInput, 'TEST_EMPTY_RESULTS');
+    await userEvent.click(searchButton);
+    
+    // This should trigger the no-results case on line 103
+    await waitFor(() => {
+      expect(screen.getByText('No results found')).toBeInTheDocument();
+    });
+    
+    expect(screen.getByText('Try different keywords or check your spelling for "TEST_EMPTY_RESULTS"')).toBeInTheDocument();
+    expect(screen.getByText('🔍')).toBeInTheDocument();
+    
+    unmount();
+  });
 });

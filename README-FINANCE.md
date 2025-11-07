@@ -1,8 +1,8 @@
-# Finance Search AI 🏦💰📈
+# Finance Search AI 
 
 A sophisticated finance search application powered by React and AI/LLM technology. Features an OpenAI ChatGPT-style interface for intelligent financial queries, stock analysis, and market insights.
 
-## 🚀 Features
+##  Feature
 
 ### Frontend (React)
 - **OpenAI ChatGPT-style Interface**: Modern, clean UI matching OpenAI's design language
@@ -20,7 +20,7 @@ A sophisticated finance search application powered by React and AI/LLM technolog
 - **Rate Limiting**: Built-in protection against API abuse
 - **Error Handling**: Robust error handling with fallback responses
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 search-ui-react/
@@ -102,7 +102,7 @@ cd ../..
 npm start
 ```
 
-## 🌐 Usage
+## Usage
 
 ### Access Points
 - **React Frontend**: http://localhost:3000
@@ -139,7 +139,7 @@ Builds the app for production deployment
 ### `./start-finance-app.sh`
 Starts both the React frontend and Finance API backend
 
-## 🧪 Testing
+## Testing
 
 ### Run Frontend Tests
 ```bash
@@ -169,7 +169,7 @@ curl -X POST http://localhost:5001/api/finance/search \
   -d '{"query":"market trends","context":"search","includeData":true}'
 ```
 
-## 🎨 UI Design - OpenAI ChatGPT Style
+## UI Design - OpenAI ChatGPT Style
 
 - **Sidebar Navigation**: Clean left sidebar with brand and menu items
 - **Centered Chat Interface**: Main content area for search and results
@@ -177,7 +177,7 @@ curl -X POST http://localhost:5001/api/finance/search \
 - **Responsive Layout**: Optimized for all screen sizes
 - **Interactive Elements**: Hover effects and smooth animations
 
-## 🔐 Security & Performance
+## Security & Performance
 
 ### Security Features
 - **CORS Protection**: Configured for specific origins
@@ -185,7 +185,7 @@ curl -X POST http://localhost:5001/api/finance/search \
 - **Input Validation**: Comprehensive request validation
 - **Environment Variables**: Secure API key management
 
-## 📊 Development Mode
+## Development Mode
 
 When API keys are not configured, the application runs in development mode with:
 - **Mock Financial Data**: Realistic sample data for testing
@@ -193,7 +193,7 @@ When API keys are not configured, the application runs in development mode with:
 - **Full UI Functionality**: Complete interface testing
 - **No External Dependencies**: Works offline for development
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the Repository
 2. Create a Feature Branch: `git checkout -b feature/amazing-feature`
@@ -202,10 +202,3 @@ When API keys are not configured, the application runs in development mode with:
 5. Push to Branch: `git push origin feature/amazing-feature`
 6. Open Pull Request
 
-## 📝 License
-
-MIT License - see LICENSE file for details
-
----
-
-**Built with ❤️ for intelligent financial analysis and modern web development**

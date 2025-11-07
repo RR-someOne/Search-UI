@@ -66,19 +66,17 @@ describe('SearchInterface Component', () => {
     expect(searchButton).toBeInTheDocument();
   });
 
-  test('renders quick action buttons', () => {
+  test('displays empty results container initially', () => {
     renderSearchInterface();
     
-    expect(screen.getByText('Stock Analysis')).toBeInTheDocument();
-    expect(screen.getByText('Market Trends')).toBeInTheDocument();
-    expect(screen.getByText('Investment Strategy')).toBeInTheDocument();
-  });
-
-  test('displays welcome message initially', () => {
-    renderSearchInterface();
+    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
+    const searchButton = screen.getByRole('button', { name: 'Search' });
     
-    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
-    expect(screen.getByText('Ask me about stocks, market trends, investment strategies, or any financial topic.')).toBeInTheDocument();
+    expect(searchInput).toBeInTheDocument();
+    expect(searchButton).toBeInTheDocument();
+    
+    // Should not display any welcome message
+    expect(screen.queryByText('Finance Search Tool with AI')).not.toBeInTheDocument();
   });
 
   test('updates search input value when typing', async () => {
@@ -257,38 +255,6 @@ describe('SearchInterface Component', () => {
     unmount();
   });
 
-  test('quick action buttons trigger search with predefined queries', async () => {
-    const mockResponse = {
-      response: 'Stock analysis response',
-      data: { stocks: [] },
-      sources: ['Test'],
-      suggestions: []
-    };
-    
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockResponse,
-    });
-
-    render(<SearchInterface />);
-    
-    const stockAnalysisButton = screen.getByText('Stock Analysis');
-    await userEvent.click(stockAnalysisButton);
-    
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:5001/api/finance/search', expect.objectContaining({
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        query: 'analyze AAPL stock performance',
-        context: 'search',
-        includeData: true
-      })
-    }));
-    
-    const searchInput = screen.getByPlaceholderText('Ask about stocks, market trends, or financial analysis...');
-    expect(searchInput).toHaveValue('analyze AAPL stock performance');
-  });
-
   test('handles search errors gracefully', async () => {
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     
@@ -325,7 +291,9 @@ describe('SearchInterface Component', () => {
     await userEvent.click(searchButton);
     
     expect(mockFetch).not.toHaveBeenCalled();
-    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
+    
+    // Should not display any welcome message
+    expect(screen.queryByText('Finance Search Tool with AI')).not.toBeInTheDocument();
     
     // Clean up
     unmount();
@@ -486,7 +454,9 @@ describe('SearchInterface Component', () => {
     await userEvent.type(searchInput, '{enter}');
     
     expect(mockFetch).not.toHaveBeenCalled();
-    expect(screen.getByText('Finance Search Tool with AI')).toBeInTheDocument();
+    
+    // Should not display any welcome message
+    expect(screen.queryByText('Finance Search Tool with AI')).not.toBeInTheDocument();
     
     unmount();
   });

@@ -82,7 +82,7 @@ describe('App Component', () => {
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
-  test('shows login page when showLogin event is triggered and user is not authenticated', async () => {
+  test('shows login modal when showLogin event is triggered and user is not authenticated', async () => {
     mockUseAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -94,22 +94,26 @@ describe('App Component', () => {
 
     render(<App />);
     
-    // Initially should show main app
+    // Initially should show main app and no modal
     expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2);
+    expect(screen.queryByText('Log in or sign up')).not.toBeInTheDocument();
     
     // Trigger the showLogin event
     act(() => {
       window.dispatchEvent(new CustomEvent('showLogin'));
     });
     
-    // Should now show login page
+    // Should now show login modal
     await waitFor(() => {
-      expect(screen.getByText('Sign in to access your personalized financial data and insights')).toBeInTheDocument();
+      expect(screen.getByText('Log in or sign up')).toBeInTheDocument();
     });
+    
+    // Verify modal subtitle is also present
+    expect(screen.getByText("You'll get smarter responses and can upload files, images, and more.")).toBeInTheDocument();
   });
 
-  test('hides login page when user becomes authenticated', async () => {
-    // Start with unauthenticated state and login page showing
+  test('hides login modal when user becomes authenticated', async () => {
+    // Start with unauthenticated state
     const mockAuth = {
       isAuthenticated: false,
       isLoading: false,
@@ -123,14 +127,14 @@ describe('App Component', () => {
     
     const { rerender } = render(<App />);
     
-    // Trigger login page
+    // Trigger login modal
     act(() => {
       window.dispatchEvent(new CustomEvent('showLogin'));
     });
     
-    // Verify login page is shown
+    // Verify login modal is shown
     await waitFor(() => {
-      expect(screen.getByText('Sign in to access your personalized financial data and insights')).toBeInTheDocument();
+      expect(screen.getByText('Log in or sign up')).toBeInTheDocument();
     });
     
     // Now simulate user becoming authenticated
@@ -139,13 +143,13 @@ describe('App Component', () => {
     
     rerender(<App />);
     
-    // Should now show main app instead of login page
+    // Should still show main app and modal should be hidden
     await waitFor(() => {
       expect(screen.getAllByText('Finance Search Tool')).toHaveLength(2);
     });
     
-    // Login page should no longer be visible
-    expect(screen.queryByText('Sign in to access your personalized financial data and insights')).not.toBeInTheDocument();
+    // Login modal should no longer be visible
+    expect(screen.queryByText('Log in or sign up')).not.toBeInTheDocument();
   });
 
   test('cleans up event listener on unmount', () => {

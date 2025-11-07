@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navigation from './components/client/Navigation';
-import Hero from './components/client/Hero';
 import SearchInterface from './components/client/SearchInterface';
 import LoginModal from './components/auth/LoginModal';
 import PopupLoginPage from './components/auth/PopupLoginPage';
@@ -47,7 +46,6 @@ const AppContent = () => {
       <Navigation />
       <main className="main-content">
         <div className="chat-container">
-          <Hero />
           <SearchInterface />
         </div>
       </main>

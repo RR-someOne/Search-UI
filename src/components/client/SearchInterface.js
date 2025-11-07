@@ -6,12 +6,6 @@ const SearchInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const quickActions = [
-    { icon: '�', text: 'Stock Analysis', query: 'analyze AAPL stock performance' },
-    { icon: '�', text: 'Market Trends', query: 'current market trends and outlook' },
-    { icon: '🏦', text: 'Investment Strategy', query: 'portfolio diversification strategies' }
-  ];
-
   const performSearch = useCallback(async (query = searchQuery) => {
     const trimmedQuery = query.trim();
     
@@ -102,15 +96,7 @@ const SearchInterface = () => {
     }
 
     if (!hasSearched) {
-      return (
-        <div className="no-results">
-          <div style={{ fontSize: '24px', marginBottom: '16px' }}>�</div>
-          <div style={{ fontWeight: '600', fontSize: '28px', marginBottom: '8px' }}>
-            Finance Search Tool with AI
-          </div>
-          <div>Ask me about stocks, market trends, investment strategies, or any financial topic.</div>
-        </div>
-      );
+      return null;
     }
 
     if (!results || results.length === 0) {
@@ -206,49 +192,36 @@ const SearchInterface = () => {
   };
 
   return (
-    <div className="search-container">
-      <div className="search-box">
-        <div className="search-input-container">
-          <input 
-            type="text" 
-            className="search-input"
-            placeholder="Ask about stocks, market trends, or financial analysis..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-            autoComplete="off"
-          />
-          <button 
-            className="search-button" 
-            type="button"
-            onClick={handleSearch}
-            aria-label="Search"
-          >
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"></circle>
-              <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2"></path>
-            </svg>
-          </button>
-        </div>
-        
-        {/* Quick Actions */}
-        <div className="quick-actions">
-          {quickActions.map((action, index) => (
-            <button 
-              key={index}
-              className="quick-action" 
-              onClick={() => handleQuickAction(action.query)}
-            >
-              <span className="quick-action-icon">{action.icon}</span>
-              {action.text}
-            </button>
-          ))}
-        </div>
-      </div>
-      
-      {/* Results */}
+    <div className="search-interface">
+      {/* Results at top */}
       <div className="results-container">
         {renderResults()}
+      </div>
+      
+      {/* Search box at bottom */}
+      <div className="search-container">
+        <div className="search-box">
+          <div className="search-input-container">
+            <input 
+              type="text" 
+              className="search-input"
+              placeholder="Ask about stocks, market trends, or financial analysis..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+              autoComplete="off"
+            />
+            <button 
+              className="search-button" 
+              type="button"
+              onClick={handleSearch}
+              aria-label="Search"
+            >
+              {/* <span className="search-button-icon">⚡</span> */}
+              Search
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
